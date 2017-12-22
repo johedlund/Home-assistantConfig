@@ -1,0 +1,352 @@
+- alias: "heater bmw minus 5"
+  initial_state: True
+  trigger:
+   - platform: time
+     minutes: '/5'
+     seconds: 2
+  condition:
+    condition: and
+    conditions: 
+      - condition: numeric_state
+        entity_id: sensor.outside_temperature
+        below: -5
+      - condition: template
+        value_template: '{{ ((now().strftime("%s") | int + 10000) | timestamp_custom("%H:%M")) == states.sensor.departuretime_bmw.state  }}'
+  action:
+     - service: script.turn_on
+       entity_id: script.heater_bmw_on
+     - service: notify.pushbullet
+       data_template:
+         message: 'Motorvärmare bmw (-5°) är på i 2,5h från {{now().strftime("%H:%M:%S")}} Temp ute: {{ states.sensor.outside.state}}°C'
+      #  - service: notify.ios_bmw
+      #    data_template:
+      #      message: 'Motorvärmaren (-10°) är på i 2h från {{now().strftime("%H:%M:%S")}} Temp ute: {{ states.sensor.netatmo_utomhus_norra_husgaveln_temperature.state}}°C'
+     - service: homeassistant.turn_off
+       entity_id: automation.heater_bmw_minus_5, automation.heater_bmw_plus_1, automation.heater_bmw_plus_10
+   
+- alias: "heater bmw plus 1"
+  initial_state: True
+  trigger:
+   - platform: time
+     minutes: '/5'
+     seconds: 2
+  condition:
+    condition: and
+    conditions:
+      - condition: numeric_state
+        entity_id: sensor.outside_temperature
+        below: 1.0 
+      - condition: template
+        value_template: '{{ ((now().strftime("%s") | int + 7200) | timestamp_custom("%H:%M")) == states.sensor.departuretime_bmw.state  }}'       
+  action:
+     - service: script.turn_on
+       entity_id: script.heater_bmw_on
+     - service: notify.pushbullet
+       data_template:
+         message: 'Motorvärmare bmw (+1°) är på i 2h från {{now().strftime("%H:%M:%S")}} Temp ute: {{ states.sensor.outside_temperature.state}}°C'
+     - service: homeassistant.turn_off
+       entity_id: automation.heater_bmw_plus_1, automation.heater_bmw_plus_10, automation.heater_bmw_minus_5
+ 
+- alias: "heater bmw plus 10"
+  initial_state: True
+  trigger:
+   - platform: time
+     minutes: '/5'
+     seconds: 2
+  condition:
+    condition: and
+    conditions:
+      - condition: numeric_state
+        entity_id: sensor.outside_temperature
+        below: 10.0 
+      - condition: template
+        value_template: '{{ ((now().strftime("%s") | int + 2400) | timestamp_custom("%H:%M")) == states.sensor.departuretime_bmw.state  }}'       
+  action:
+     - service: script.turn_on
+       entity_id: script.heater_bmw_on
+     - service: notify.pushbullet
+       data_template:
+         message: 'Motorvärmare bmw (+10°) är på i 45 min från {{now().strftime("%H:%M:%S")}} Temp ute: {{ states.sensor.outside.state}}°C'
+      #  - service: notify.ios_bmw
+      #    data_template:
+      #      message: 'Motorvärmaren (+5°) är på i 30 min från {{now().strftime("%H:%M:%S")}} Temp ute: {{ states.sensor.netatmo_utomhus_norra_husgaveln_temperature.state}}°C'
+     - service: homeassistant.turn_off
+       entity_id: automation.heater_bmw_plus_10, automation.heater_bmw_plus_1, automation.heater_bmw_minus_5
+ 
+- alias: "heater bmw enabled"
+  trigger:
+    platform: state
+    entity_id: input_number.heater_bmw_hour, input_number.heater_bmw_minutes
+  action:
+    - service: homeassistant.turn_on
+      entity_id:
+        - automation.heater_bmw_minus_5
+        - automation.heater_bmw_plus_1
+        - automation.heater_bmw_plus_10
+
+- alias: "heater bmw off"
+  initial_state: False
+  trigger:
+   - platform: time
+     minutes: '/5'
+     seconds: 2
+  condition:
+    - condition: template
+      value_template: '{{ now().hour == (states.input_number.heater_bmw_hour.state  | round(0))  and  now().minute == (states.input_number.heater_bmw_minutes.state  | round(0) )  }}'       
+  action:
+     - service: homeassistant.turn_off
+       entity_id: switch.motor_warmer, automation.heater_bmw_off
+     - service: notify.pushbullet
+       data_template:
+         message: 'Motorvärmare BMW Stängs nu av {{now().strftime("%H:%M:%S")}} Temp ute: {{ states.sensor.outside_temperature.state}}°C'
+         
+
+- id: lights_on
+  alias: Turn on lights at night
+  trigger:
+    platform: sun
+    event: sunset
+    offset: -01:00:00
+  action:
+    service: homeassistant.turn_on
+    entity_id: 
+      - switch.lower_floor
+      
+- id: lights_off
+  alias: Turn off lights at night
+  trigger:
+    platform: time
+    at: '23:00:00'
+  action:
+    service: homeassistant.turn_off
+    entity_id: 
+      - switch.lower_floor
+      
+#Tänd kl07:30 om solen fortfarande är nere
+
+- id: lights_on_0730 
+  alias: 'Lights on at 07:30 if sun is down'
+  trigger:
+    platform: time
+    at: '07:30:00'
+  condition:
+    condition: and
+    conditions:
+      - condition: time
+        weekday:
+        - mon
+        - tue
+        - wed
+        - thu
+        - fri
+        #- sat
+        #- sun
+      - condition: state
+        entity_id: sun.sun
+        state: 'below_horizon'
+  action:
+     service: homeassistant.turn_on
+     entity_id:
+       - switch.lower_floor
+ 
+#Tänd kl07:00 om solen fortfarande är nere
+ 
+- alias: 'Lights on at 07:00 if sun is down. Weekend'
+  trigger:
+    platform: time
+    at: '07:00:00'
+  condition:
+    condition: and
+    conditions:
+      - condition: time
+        weekday:
+        #- mon
+        #- tue
+        #- wed
+        #- thu
+        #- fri
+        - sat
+        - sun
+      - condition: state
+        entity_id: sun.sun
+        state: 'below_horizon'
+  action:
+     service: homeassistant.turn_on
+     entity_id:
+       - switch.lower_floor
+ 
+#släck vid soluppgång
+- id: lights_off_sunrise 
+  alias: 'Lighs off at sunrise'
+  trigger:
+     platform: sun
+     event: sunrise
+     offset: '02:00:00'
+  condition:
+    condition: and
+    conditions:
+      - condition: time
+        weekday:
+        - mon
+        - tue
+        - wed
+        - thu
+        - fri
+        - sat
+        - sun
+  action:
+     service: homeassistant.turn_off
+     entity_id:
+       - switch.lower_floor
+       - light.jh_sang
+       - light.moa_taklampa
+       - light.oliver_taklampa
+
+       
+- alias: persistence_publish
+  initial_state: 'on'
+  hide_entity: true
+  trigger:
+    - platform: event
+      event_type: state_changed
+  condition:
+    - condition: template
+      value_template: "{{ trigger.event.data is not none }}"
+    - condition: template
+      value_template: "{{ trigger.event.data.new_state is not none }}"
+    - condition: template
+      value_template: "{{ trigger.event.data.new_state.attributes is not none }}"
+    - condition: template
+      value_template: "{{ trigger.event.data.new_state.attributes.persistent|default(false, true) }}"
+    - condition: template
+      value_template: "{{ trigger.event.data.old_state is not none }}"
+    - condition: template
+      value_template: "{{ trigger.event.data.new_state.state != trigger.event.data.old_state.state }}"
+    - condition: or
+      conditions:
+        - condition: template
+          value_template: "{{ trigger.event.data.entity_id.split('.')[0] == 'automation' }}"
+        - condition: template
+          value_template: "{{ trigger.event.data.entity_id.split('.')[0] == 'input_boolean' }}"
+        - condition: template
+          value_template: "{{ trigger.event.data.entity_id.split('.')[0] == 'input_select' }}"
+        - condition: template
+          value_template: "{{ trigger.event.data.entity_id.split('.')[0] == 'input_number' }}"
+        - condition: template
+          value_template: "{{ trigger.event.data.entity_id.split('.')[0] == 'light' }}"
+        - condition: template
+          value_template: "{{ trigger.event.data.entity_id.split('.')[0] == 'switch' }}"
+  action:
+    - service: mqtt.publish
+      data_template:
+        topic: "home-assistant/{{ trigger.event.data.entity_id|replace('.', '/') }}"
+        payload: "{{ trigger.event.data.new_state.state }}"
+        retain: true
+
+## Persistent Subscriptions
+- alias: persistence_subscribe_binary
+  initial_state: 'on'
+  hide_entity: true
+  trigger:
+    - platform: mqtt
+      topic: home-assistant/automation/+
+    - platform: mqtt
+      topic: home-assistant/input_boolean/+
+    - platform: mqtt
+      topic: home-assistant/light/+
+    - platform: mqtt
+      topic: home-assistant/switch/+
+  condition: &subscribe_condition
+    - condition: template
+      value_template: "{{ ((states[trigger.topic.split('/')[1]][trigger.topic.split('/')[2]]|default).attributes|default).persistent|default(false, true) }}"
+    - condition: template
+      value_template: "{{ not is_state(trigger.topic|replace('home-assistant/', '')|replace('/', '.'), trigger.payload) }}"
+  action: &subscribe_action
+    - service_template: "{{ trigger.topic.split('/')[1] }}.turn_{{ trigger.payload|lower }}"
+      data_template:
+        entity_id: "{{ trigger.topic|replace('home-assistant/', '')|replace('/', '.') }}"
+
+##
+- alias: persistence_subscribe_select_option
+  initial_state: 'on'
+  hide_entity: true
+  trigger:
+    - platform: mqtt
+      topic: home-assistant/input_select/+
+  condition: *subscribe_condition
+  action:
+    - service_template: "{{ trigger.topic.split('/')[1] }}.select_option"
+      data_template:
+        entity_id: "{{ trigger.topic|replace('home-assistant/', '')|replace('/', '.') }}"
+        option: "{{ trigger.payload }}"
+
+##
+- alias: persistence_subscribe_select_value
+  initial_state: 'on'
+  hide_entity: true
+  trigger:
+    - platform: mqtt
+      topic: home-assistant/input_number/+
+  condition: *subscribe_condition
+  action:
+    - service_template: "{{ trigger.topic.split('/')[1] }}.set_value"
+      data_template:
+        entity_id: "{{ trigger.topic|replace('home-assistant/', '')|replace('/', '.') }}"
+        value: "{{ trigger.payload }}"
+      
+#Tänd sänglampa kl06:10 om solen fortfarande är nere
+
+- id: weekdaywakeup
+  alias: 'WakeupLights on at 06:10 if sun is down'
+  trigger:
+    platform: time
+    at: '06:10:00'
+  condition:
+    condition: and
+    conditions:
+      - condition: time
+        weekday:
+        - mon
+        - tue
+        - wed
+        - thu
+        - fri
+        #- sat
+        #- sun
+      - condition: state
+        entity_id: sun.sun
+        state: 'below_horizon'
+      - condition: state
+        entity_id: input_boolean.ledig
+        state: 'on'
+  action:
+     service: shell_command.wakeup
+
+#Tänd taklampa kl06:30 om solen fortfarande är nere
+
+- id: weekdaywakeupkids
+  alias: 'Wakeupkids on at 06:30 if sun is down'
+  trigger:
+    platform: time
+    at: '06:30:00'
+  condition:
+    condition: and
+    conditions:
+      - condition: time
+        weekday:
+        - mon
+        - tue
+        - wed
+        - thu
+        - fri
+        #- sat
+        #- sun
+      - condition: state
+        entity_id: sun.sun
+        state: 'below_horizon'
+      - condition: state
+        entity_id: input_boolean.skollov
+        state: 'on'
+  action:
+     service: shell_command.wakeupkids
+

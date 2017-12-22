@@ -1,0 +1,64 @@
+default_view:
+    view: yes
+    icon: mdi:home 
+    entities:
+      - group.light
+      - sensor.outside_temperature
+      - group.lampor
+      - camera.weather
+      - group.skollov
+      - camera.utekamera
+
+heater_bmw:
+  name: Heater
+  icon: mdi:car
+  view: yes
+  entities:
+    - group.mvbmw
+    - camera.traffic
+    
+media:
+  name: Media
+  view: yes
+  icon: mdi:movie
+  entities:
+    - media_player.picoreplayer
+       
+mvbmw:
+  name: "Motorvärmare BMW"
+  control:
+  entities:
+    - sensor.departuretime_bmw
+    - sensor.heater_start_time_bmw
+    - input_number.heater_bmw_hour
+    - input_number.heater_bmw_minutes
+    - sensor.outside_temperature
+    - switch.motor_warmer
+    
+lampor:
+  name: "Lampor"
+  icon: mdi:light
+  control: 
+  entities:
+    - light.jh_sang
+    - light.moa_taklampa
+    - light.oliver_taklampa
+    - switch.lower_floor
+    - switch.kitchen_sofa
+    - switch.kitchen_window
+    - switch.kläkammare
+    - switch.livingroom_window
+    - switch.tv_room_corner
+    - switch.tv_room_window
+    - switch.kitchen_sink
+    - switch.julgran
+    - switch.tv_corner
+
+    
+skollov:
+  name: "Vardag eller ledigt?"
+  control:
+  entities:
+    - input_boolean.skollov
+    - input_boolean.ledig
+    

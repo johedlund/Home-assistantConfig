@@ -1,0 +1,65 @@
+automation.persistence_publish:
+  friendly_name: "Persistence Publish"
+automation.persistence_subscribe_binary:
+  friendly_name: "Persistence Subscribe (Binary)"
+automation.persistence_subscribe_select_option:
+  friendly_name: "Persistence Subscribe (Select Option)"
+automation.persistence_subscribe_select_value:
+  friendly_name: "Persistence from MQTT (Select Value)"
+#inputes
+input_number.alarmhour:
+  persistent: true
+input_number.alarmminutes:
+  persistent: true
+  
+# Add an entry for each entity that you want to overwrite.
+group.all_automations:
+  hidden: true
+  friendly_name: 'Automations'
+  
+group.mvbmw:
+  assumed_state: false
+      
+switch.lower_floor:
+  assumed_state: false
+  friendly_name: "Hela nedervåningen"
+  icon: mdi:lightbulb
+switch.kitchen_sofa:
+  assumed_state: false
+  icon: mdi:lightbulb
+switch.kitchen_window:
+  assumed_state: false
+  icon: mdi:lightbulb
+switch.kladkammare:
+  assumed_state: false
+  icon: mdi:lightbulb
+switch.livingroom_window:
+  assumed_state: false
+  icon: mdi:lightbulb
+switch.tv_room_corner:
+  assumed_state: false
+  icon: mdi:lightbulb
+switch.tv_room_window:
+  assumed_state: false
+  icon: mdi:lightbulb
+switch.tv_corner:
+  assumed_state: false
+  icon: mdi:lightbulb
+switch.julgran:
+  assumed_state: false
+  icon: mdi:lightbulb
+switch.kitchen_sink:
+  assumed_state: false
+  icon: mdi:lightbulb
+light.jh_sang:
+  assumed_state: false
+  icon: mdi:lightbulb
+light.moa_taklampa:
+  assumed_state: false
+  icon: mdi:lightbulb
+light.oliver_taklampa:
+  assumed_state: false
+  icon: mdi:lightbulb
+switch.motor_warmer:
+  assumed_state: false
+  icon: mdi:radiator

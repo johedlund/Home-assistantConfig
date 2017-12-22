@@ -1,0 +1,7 @@
+heater_bmw_on:
+  sequence:
+  - service: homeassistant.turn_on
+    #data: 
+    entity_id: switch.motor_warmer
+  - service: automation.turn_on
+    entity_id: automation.heater_bmw_off

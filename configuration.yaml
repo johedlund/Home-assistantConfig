@@ -1,0 +1,140 @@
+homeassistant:
+  # Name of the location where Home Assistant is running
+  name: Home
+  # Location required to calculate the time the sun rises and sets
+  latitude: !secret latitude
+  longitude: !secret longitude
+  # Impacts weather/sunrise data (altitude above sea level in meters)
+  elevation: 15
+  # metric for Metric, imperial for Imperial
+  unit_system: metric
+  # Pick yours from here: http://en.wikipedia.org/wiki/List_of_tz_database_time_zones
+  time_zone: Europe/Stockholm
+  # Customization file
+  customize: !include customize.yaml
+
+# Show links to resources in log and frontend
+# introduction:
+
+# Enables the frontend
+frontend:
+
+# Enables configuration UI
+config:
+
+# Include yaml files
+group: !include groups.yaml
+automation: !include automations.yaml
+script: !include scripts.yaml
+shell_command: !include shell_commands.yaml
+# scipts: !include scipts.yaml
+# zone: !include zones.yaml
+sensor: !include sensors.yaml
+# switch: !include switches.yaml
+# device_tracker: !include device_tracker.yaml
+# secret: !include secrets.yaml
+
+
+http:
+  # Secrets are defined in the file secrets.yaml
+  # api_password: !secret http_password
+  # Uncomment this if you are using SSL/TLS, running in Docker container, etc.
+  # base_url: example.duckdns.org:8123
+
+# Checks for available updates
+# Note: This component will send some information about your system to
+# the developers to assist with development of Home Assistant.
+# For more information, please see:
+# https://home-assistant.io/blog/2016/10/25/explaining-the-updater/
+updater:
+  # Optional, allows Home Assistant developers to focus on popular components.
+  # include_used_components: true
+
+# Discover some devices automatically
+discovery:
+
+# Tellstick
+tellstick:
+  signal_repetitions: 2
+
+recorder:
+
+# Pushbullet
+notify:
+  - name: pushbullet
+    platform: pushbullet
+    api_key: !secret pushbullet_key
+
+# Allows you to issue voice commands from the frontend in enabled browsers
+conversation:
+
+# Enables support for tracking state changes over time
+history:
+
+# View all events in a logbook
+logbook:
+
+  
+
+# Enables a map showing the location of tracked devices
+map:
+
+# Track the sun
+sun:
+
+# Tracker
+device_tracker:
+ - platform: nmap_tracker
+   hosts: 192.168.2.1/24
+
+
+
+# Text to speech
+tts:
+  - platform: google
+  
+# Input for carwarmer
+input_number:
+  heater_bmw_hour:
+    name: Timmar
+    icon: mdi:timer
+    initial: 07
+    min: 0
+    max: 23
+    step: 1
+   
+  heater_bmw_minutes:
+    name: Minuter
+    icon: mdi:timer
+    initial: 30
+    min: 0
+    max: 55
+    step: 5
+    
+input_boolean:
+  skollov:
+    name: "Väckningslampor kidsen"
+    initial: off
+  ledig:
+    name: "Väckningslampa sovrum"
+    initial: off 
+    
+       
+ 
+camera:
+  - platform: generic
+    name: Weather
+    still_image_url: !secret weather_url
+    content_type: 'image/svg+xml'
+    
+  - platform: synology
+    name: utekamera
+    url: !secret synology_url
+    username: !secret synology_user
+    password: !secret synology_pw    
+    timeout: 15
+    verify_ssl: False
+    
+  - platform: generic
+    name: Traffic
+    still_image_url: !secret traffic_url
