@@ -3,15 +3,15 @@
     departuretime_bmw:
       friendly_name: 'Avresetid BMW'
       value_template: '{% if states.input_number.heater_bmw_hour.state|round(0)|string|length == 1 %}0{% endif %}{{ states.input_number.heater_bmw_hour.state|round(0)|string }}:{% if states.input_number.heater_bmw_minutes.state|round(0)|string|length == 1 %}0{% endif %}{{ states.input_number.heater_bmw_minutes.state|round(0)|string }}'
-      entity_id: 
-       - input_number.heater_bmw_minutes
-       - input_number.heater_bmw_hour
+#      entity_id: 
+#       - input_number.heater_bmw_minutes
+#       - input_number.heater_bmw_hour
        
 - platform: yr
   
 - platform: tellstick
   134: Outside
-  21: Inside
+  135: Bergrum
   only_named: True
   temperature_scale: "°C"
-  datatype_mask: 1
+  datatype_mask: 127

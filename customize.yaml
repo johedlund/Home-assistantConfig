@@ -61,5 +61,6 @@ light.oliver_taklampa:
   assumed_state: false
   icon: mdi:lightbulb
 switch.motor_warmer:
+  friendly_name: "Motorvärmare på 2h30m från on"
   assumed_state: false
   icon: mdi:radiator

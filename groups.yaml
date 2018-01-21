@@ -4,10 +4,13 @@ default_view:
     entities:
       - group.light
       - sensor.outside_temperature
+      - sensor.bergrum_temperature
+      - sensor.bergrum_humidity
+      - sensor.outside_humidity
       - group.lampor
       - camera.weather
       - group.skollov
-      - camera.utekamera
+      - camera.hemmacam
 
 heater_bmw:
   name: Heater
@@ -23,22 +26,26 @@ media:
   icon: mdi:movie
   entities:
     - media_player.picoreplayer
+    - media_player.ue65ju7005_ue65ju7000
+    - media_player.tvrummet
        
 mvbmw:
   name: "Motorvärmare BMW"
-  control:
+  control: hidden
   entities:
+    - switch.motor_warmer
+    - input_boolean.car_heater
     - sensor.departuretime_bmw
     - sensor.heater_start_time_bmw
     - input_number.heater_bmw_hour
     - input_number.heater_bmw_minutes
     - sensor.outside_temperature
-    - switch.motor_warmer
+    
     
 lampor:
   name: "Lampor"
   icon: mdi:light
-  control: 
+  control: hidden
   entities:
     - light.jh_sang
     - light.moa_taklampa
@@ -50,14 +57,14 @@ lampor:
     - switch.livingroom_window
     - switch.tv_room_corner
     - switch.tv_room_window
-    - switch.kitchen_sink
+    - switch.kitchen_sink 
     - switch.julgran
     - switch.tv_corner
 
     
 skollov:
-  name: "Vardag eller ledigt?"
-  control:
+  name: "Väckningslampor"
+  control: hidden
   entities:
     - input_boolean.skollov
     - input_boolean.ledig

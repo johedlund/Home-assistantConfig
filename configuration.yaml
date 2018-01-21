@@ -55,11 +55,15 @@ discovery:
 
 # Tellstick
 tellstick:
-  signal_repetitions: 2
+  signal_repetitions: 3
 
 recorder:
+#  purge_interval: 15
+#  purge_keep_days: 15
+  db_url: !secret db_url
+  
 
-# Pushbullet
+# Pushbullet 
 notify:
   - name: pushbullet
     platform: pushbullet
@@ -70,6 +74,12 @@ conversation:
 
 # Enables support for tracking state changes over time
 history:
+  include:
+    domains:
+      - sensor
+      - switch
+      - media_player
+      - light
 
 # View all events in a logbook
 logbook:
@@ -86,6 +96,12 @@ sun:
 device_tracker:
  - platform: nmap_tracker
    hosts: 192.168.2.1/24
+   home_interval: 10
+   consider_home: 360
+   exclude:
+    - 192.168.2.210
+    - 192.168.2.184
+    - 192.168.2.113
 
 
 
@@ -113,12 +129,14 @@ input_number:
     
 input_boolean:
   skollov:
-    name: "Väckningslampor kidsen"
-    initial: off
+    name: "Kidsen"
+    initial: on
   ledig:
-    name: "Väckningslampa sovrum"
-    initial: off 
-    
+    name: "Sovrum"
+    initial: on
+  car_heater:
+    name: "Tidsinställd motorvärmare"
+    initial: on  
        
  
 camera:
@@ -132,9 +150,14 @@ camera:
     url: !secret synology_url
     username: !secret synology_user
     password: !secret synology_pw    
-    timeout: 15
+    timeout: 45
     verify_ssl: False
     
   - platform: generic
     name: Traffic
     still_image_url: !secret traffic_url
+    
+timer:
+  motor_warmer:
+    duration: '02:30:00'
+#    duration: '00:02:15'
