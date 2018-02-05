@@ -103,10 +103,15 @@
         Temp ute: {{ states.sensor.outside.state}}°C'
   - service: homeassistant.turn_off
     entity_id: automation.heater_bmw_plus_10, automation.heater_bmw_plus_1, automation.heater_bmw_minus_5
-- alias: heater bmw enabled
+- id: cwarmertimer
+  alias: heater bmw enabled
   trigger:
-    platform: state
-    entity_id: input_number.heater_bmw_hour, input_number.heater_bmw_minutes
+    platform: time
+    at: 02:00
+  condition:
+       - condition: state
+         entity_id: input_boolean.car_heater
+         state: 'on'
   action:
   - service: homeassistant.turn_on
     entity_id:
@@ -359,8 +364,8 @@
       state: 'on'
   action:
     service: shell_command.wakeup
-- id: weekdaywakeupkids
-  alias: Wakeupkids on at 06:30 if sun is down
+- id: weekdaywakeupmoa
+  alias: Wakeup Moa on at 06:30 if sun is down
   initial_state: true
   trigger:
     platform: time
@@ -379,7 +384,59 @@
       entity_id: sun.sun
       state: below_horizon
     - condition: state
-      entity_id: input_boolean.skollov
+      entity_id: input_boolean.ledigmoa
       state: 'on'
   action:
-    service: shell_command.wakeupkids
+    service: shell_command.wakeupmoa
+- id: weekdaywakeupoliver
+  alias: Wakeup Oliver on at 06:30 if sun is down
+  initial_state: true
+  trigger:
+    platform: time
+    at: 06:30:00
+  condition:
+    condition: and
+    conditions:
+    - condition: time
+      weekday:
+      - mon
+      - tue
+      - wed
+      - thu
+      - fri
+    - condition: state
+      entity_id: sun.sun
+      state: below_horizon
+    - condition: state
+      entity_id: input_boolean.ledigoliver
+      state: 'on'
+  action:
+    service: shell_command.wakeupoliver
+- id: endwakeupmoa
+  alias: Turn Moas wakeup sequence off if lamp is switched off
+  trigger: 
+    platform: state
+    entity_id: light.moa_taklampa
+    from: 'on'
+    to: 'off'
+  action:
+    service: shell_command.endwakeupmoa
+- id: endwakeupoliver
+  alias: Turn Olivers wakeup sequence off if lamp is switched off
+  trigger: 
+    platform: state
+    entity_id: light.oliver_taklampa
+    from: 'on'
+    to: 'off'
+  action:
+    service: shell_command.endwakeupoliver
+- id: endwakeup
+  alias: Turn wakeup sequence off if lamp is switched off
+  trigger: 
+    platform: state
+    entity_id: light.jh_sang
+    from: 'on'
+    to: 'off'
+  action:
+    service: shell_command.endwakeup
+    

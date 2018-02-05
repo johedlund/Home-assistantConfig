@@ -66,6 +66,7 @@ skollov:
   name: "Väckningslampor"
   control: hidden
   entities:
-    - input_boolean.skollov
+    - input_boolean.ledigmoa
+    - input_boolean.ledigoliver
     - input_boolean.ledig
     
