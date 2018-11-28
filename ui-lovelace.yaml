@@ -1,0 +1,177 @@
+title: My Lovely Home Automation
+views:
+  - title: Home
+    cards:
+      - type: picture-entity
+        title: Traffic
+        entity: camera.traffic
+        camera_image: camera.traffic
+        show_info: true
+        tap_action: dialog
+
+      - type: picture-entity
+        title: Weather
+        entity: camera.weather
+        camera_image: camera.weather
+        show_info: true
+        tap_action: dialog
+
+      - type: media-control
+        entity: media_player.picoreplayer
+
+      - type: media-control
+        entity: media_player.tvrummet
+
+      - type: media-control
+        entity: media_player.ue65ju7005_ue65ju7000
+
+      - type: media-control
+        entity: media_player.utepicoreplayer
+
+      - type: entities
+        title: Automations
+        show_header_toggle: true
+        entities:
+          - automation.heater_bmw_enabled
+          - automation.heater_bmw_minus_5
+          - automation.heater_bmw_off
+          - automation.heater_bmw_plus_1
+          - automation.heater_bmw_plus_10
+          - automation.lighs_off_at_sunrise
+          - automation.lights_on_at_0630_if_sun_is_down
+          - automation.lights_on_at_0700_if_sun_is_down_weekend
+          - automation.motor_warmer_on_timer
+          - automation.mwoff
+          - automation.persistence_publish
+          - automation.persistence_subscribe_binary
+          - automation.persistence_subscribe_select_option
+          - automation.persistence_subscribe_select_value
+          - automation.turn_moas_wakeup_sequence_off_if_lamp_is_switched_off
+          - automation.turn_off_lights_at_night
+          - automation.turn_olivers_wakeup_sequence_off_if_lamp_is_switched_off
+          - automation.turn_on_lights_at_night
+          - automation.turn_wakeup_sequence_off_if_lamp_is_switched_off
+          - automation.wakeup_moa_on_at_0630_if_sun_is_down
+          - automation.wakeup_oliver_on_at_0630_if_sun_is_down
+          - automation.wakeup_oliver_on_at_0655_if_sun_is_down
+          - automation.wakeuplights_on_at_0610_if_sun_is_down
+
+      - type: entity-filter
+        title: Device Trackers
+        show_header_toggle: true
+        entities:
+          - device_tracker.johan
+          - device_tracker.majbritt
+          - device_tracker.moasiphonelan
+          - device_tracker.oliver
+          - device_tracker.theresa
+        state_filter:
+          - 'home'
+        card:
+          type: glance
+          title: My Device Trackers
+
+
+      - type: entities
+        title: Groups
+        show_header_toggle: true
+        entities:
+          - group.all_automations
+          - group.all_devices
+          - group.all_lights
+          - group.all_scripts
+          - group.all_switches
+          - group.default_view
+          - group.heater_bmw
+          - group.lampor
+          - group.media
+          - group.mvbmw
+          - group.skollov
+
+      - type: entities
+        title: Input Booleans
+        show_header_toggle: true
+        entities:
+          - input_boolean.car_heater
+          - input_boolean.ledig
+          - input_boolean.ledigmoa
+          - input_boolean.ledigoliver
+
+      - type: entities
+        title: Input Numbers
+        show_header_toggle: true
+        entities:
+          - input_number.heater_bmw_hour
+          - input_number.heater_bmw_minutes
+
+      - type: entities
+        title: Lights
+        show_header_toggle: true
+        entities:
+          - light.jh_sang
+          - light.moa_taklampa
+          - light.oliver_taklampa
+
+      - type: entities
+        title: Script
+        show_header_toggle: true
+        entities:
+          - script.heater_bmw_on
+
+      - type: entities
+        title: Sensors
+        show_header_toggle: true
+        entities:
+          - sensor.bergrum_humidity
+          - sensor.bergrum_temperature
+          - sensor.departuretime_bmw
+          - sensor.outside_humidity
+          - sensor.outside_temperature
+          - sensor.samsung_clp410_series_1921682205
+          - sensor.samsung_clp410_series_1921682205_output_tray_0
+          - sensor.samsung_clp410_series_1921682205_toner_black
+          - sensor.samsung_clp410_series_1921682205_toner_cyan
+          - sensor.samsung_clp410_series_1921682205_toner_magenta
+          - sensor.samsung_clp410_series_1921682205_toner_yellow
+          - sensor.samsung_clp410_series_1921682205_tray_1
+          - sensor.yr_symbol
+
+      - type: entities
+        title: Sun
+        show_header_toggle: true
+        entities:
+          - sun.sun
+
+      - type: entities
+        title: Switchs
+        show_header_toggle: true
+        entities:
+          - switch.julgran
+          - switch.kitchen_sink
+          - switch.kitchen_sofa
+          - switch.kitchen_window
+          - switch.kladkammare
+          - switch.livingroom_window
+          - switch.lower_floor
+          - switch.motor_warmer
+          - switch.tv_corner
+          - switch.tv_room_corner
+          - switch.tv_room_window
+
+      - type: entities
+        title: Timer
+        show_header_toggle: true
+        entities:
+          - timer.motor_warmer
+
+      - type: entities
+        title: Updater
+        show_header_toggle: true
+        entities:
+          - updater.updater
+
+      - type: entities
+        title: Zone
+        show_header_toggle: true
+        entities:
+          - zone.home
