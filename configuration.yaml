@@ -19,6 +19,11 @@ homeassistant:
 # Enables the frontend
 frontend:
 
+# MQTT
+mqtt:
+  broker: 192.168.2.113
+  
+
 # Enables configuration UI
 config:
 
@@ -40,6 +45,8 @@ http:
   # api_password: !secret http_password
   # Uncomment this if you are using SSL/TLS, running in Docker container, etc.
   # base_url: example.duckdns.org:8123
+  trusted_networks:
+    - 127.0.0.1
 
 # Checks for available updates
 # Note: This component will send some information about your system to
@@ -99,6 +106,8 @@ sun:
 device_tracker:
  - platform: nmap_tracker
    hosts: 192.168.2.1/24
+   track_new_devices: no
+   interval_seconds: 20
    home_interval: 10
    consider_home: 360
    exclude:
@@ -144,6 +153,9 @@ input_boolean:
     name: "Tidsinställd motorvärmare"
     initial: on  
        
+# arlo:
+#  username: !secret arlouser
+#  password: !secret arlopass
  
 camera:
   - platform: generic
@@ -151,17 +163,20 @@ camera:
     still_image_url: !secret weather_url
     content_type: 'image/svg+xml'
     
-  - platform: synology
-    name: utekamera
-    url: !secret synology_url
-    username: !secret synology_user
-    password: !secret synology_pw    
-    timeout: 45
-    verify_ssl: False
+#  - platform: synology
+#    name: utekamera
+#    url: !secret synology_url
+#    username: !secret synology_user
+#    password: !secret synology_pw    
+#    timeout: 45
+#    verify_ssl: False
     
   - platform: generic
     name: Traffic
     still_image_url: !secret traffic_url
+    
+#  - platform: arlo
+#    ffmpeg_arguments: '-pred 1 -q:v 2'
     
 timer:
   motor_warmer:

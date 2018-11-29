@@ -15,3 +15,12 @@
   only_named: True
   temperature_scale: "°C"
   datatype_mask: 127
+  
+
+#- platform: arlo
+#  monitored_conditions:
+#    - captured_today
+#    - last_capture
+#    - total_cameras
+#    - battery_level
+#    - signal_strength
